@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    overflow: scroll;
+    background-color: #000;
+    animation: stars 5s infinite linear;
+}
+
+@keyframes stars {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 100vw 100vh;
+    }
+}
+
+.scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.rocket {
+    position: absolute;
+    height : 10%;
+    width : 6%;
+    z-index: 1;
+    animation: shake 0.2s ease infinite;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateY(-2px);
+    }
+
+    50% {
+        transform: translateX(2px);
+    }
+
+    100% {
+        transform: translateY(-2px);
+    }
+}
+
+.rocket img {
+    max-width: 50%;
+    height: auto;
+}
+
+.star {
+    position: absolute;
+    background-color: #fff;
+    width: 2px;
+    height: 2px;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+    from {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+ 
+#events {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.event-card {
+    background-color: #111;
+    border: 1px solid #444;
+    border-radius: 10px;
+    margin: 20px;
+    overflow: hidden;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.event-card.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.event-card img {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.event-card .card-body {
+    padding: 20px;
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+}

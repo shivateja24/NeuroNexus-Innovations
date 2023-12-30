@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocketry Club</title>
+    <!-- Link Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Link Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Custom CSS for event cards and team members -->
+    <style>
+    body {
+            margin: 0;
+            overflow: scroll;
+            background-color: #000;
+            animation: stars 5s infinite linear;
+            position: relative; /* Add this line */
+        }
+
+        .solar-system {
+  position: relative;
+  width: 780px;
+  height: 780px;
+  margin: auto;
+  overflow: hidden;
+}
+
+/* Some positioning rules that are common for all objects */
+.orbit {
+  border: 1px dashed #666;
+}
+
+#sun,
+.orbit,
+.orbit + div,
+.orbit + div > div {
+  position: absolute;
+}
+
+#sun,
+.orbit,
+.orbit + div {
+  top: 50%;
+  left: 50%;
+}
+.orbit + div > div {
+  top: 0;
+  left: 50%;
+}
+
+.orbit,
+.orbit + div div,
+#earth {
+  border-radius: 50%;
+}
+
+/* Individual objects rules. They are pretty much the same for 
+all objects and basically only vary in orbit size 
+and planet size. And colors :) */
+
+#sun {
+  /* Positions the top-left corner of the image to be *
+	/* in the middle of the box */
+  height: 200px;
+  width: 200px;
+  background-color: #fae20a;
+  margin-top: -100px;
+  margin-left: -100px;
+  border-radius: 50%;
+  box-shadow: 0 0 84px orange;
+}
+
+#earth {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 50px;
+  width: 50px;
+  margin-left: -25px;
+  margin-top: -25px;
+  border-radius: 50%;
+  box-shadow: 0 0 34px #3a4385;
+}
+
+.earth-orbit,
+.earth-spin {
+  width: 500px;
+  height: 500px;
+  margin-left: -250px;
+  margin-top: -250px;
+}
+
+#moon {
+  margin-top: -6px;
+  margin-left: -6px;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 14px #3a4385;
+}
+.moon-orbit,
+.moon-spin {
+  height: 90px;
+  width: 90px;
+  margin-top: -45px;
+  margin-left: -45px;
+  border-color: #447;
+}
+
+#venus {
+  margin-top: -20px;
+  margin-left: -20px;
+  height: 40px;
+  width: 40px;
+  background-color: #3498db;
+  box-shadow: 0 0 34px #3a4385;
+}
+.venus-orbit,
+.venus-spin {
+  margin-top: -185px;
+  margin-left: -185px;
+  width: 370px;
+  height: 370px;
+}
+
+#mercury {
+  margin-top: -13.5px;
+  margin-left: -13.5px;
+  height: 25px;
+  width: 25px;
+  background-color: #a65e22;
+  /* box-shadow: 0 0 34px #3a4385; */
+}
+
+.mercury-orbit,
+.mercury-spin {
+  width: 280px;
+  height: 280px;
+  margin-left: -140px;
+  margin-top: -140px;
+}
+
+#mars {
+  margin-top: -16px;
+  margin-left: -16px;
+  height: 32px;
+  width: 32px;
+  background-color: #863222;
+  box-shadow: 0 0 14px #a64232;
+}
+
+.mars-orbit,
+.mars-spin {
+  width: 700px;
+  height: 700px;
+  margin-left: -350px;
+  margin-top: -350px;
+}
+
+/* Spinning animations */
+
+@keyframes spin-right {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.earth-spin {
+  animation: spin-right 36.5s linear infinite;
+}
+.moon-spin {
+  animation: spin-right 3s linear infinite;
+}
+.venus-spin {
+  animation: spin-right 22s linear infinite;
+}
+.mercury-spin {
+  animation: spin-right 8.8s linear infinite;
+}
+.mars-spin {
+  animation: spin-right 68.7s linear infinite;
+}
+
+
+        @keyframes burn {
+            0%, 100% {
+                box-shadow: 0 0 20px 5px #ffcc00, 0 0 40px 10px #ffcc00, 0 0 60px 15px #ffcc00;
+            }
+            50% {
+                box-shadow: 0 0 20px 5px #ff7f00, 0 0 40px 10px #ff7f00, 0 0 60px 15px #ff7f00;
+            }
+        }
+
+        h2 {
+            color: white;
+        }
+
+        .scene {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .rocket {
+            position: absolute;
+            height: 10%;
+            width: 6%;
+            z-index: 1;
+            animation: shake 0.2s ease infinite;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateY(-2px);
+            }
+
+            50% {
+                transform: translateX(2px);
+            }
+
+            100% {
+                transform: translateY(-2px);
+            }
+        }
+
+        .rocket img {
+            max-width: 50%;
+            height: auto;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            width: 2px;
+            height: 2px;
+            animation: blink 1s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 0.5;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        #events {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .event-card,
+        .team-member-card {
+            background-color: #111;
+            border: 1px solid #444;
+            border-radius: 10px;
+            margin: 20px;
+            overflow: hidden;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .event-card.show,
+        .team-member-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .event-card img,
+        .team-member-card img {
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .event-card .card-body,
+        .team-member-card .card-body {
+            padding: 20px;
+        }
+
+        .event-card:hover,
+        .team-member-card:hover {
+            transform: scale(1.05);
+        }
+
+        #events,
+        #teams {
+            background-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Add this style to make the content more visible */
+        #events,
+        #teams .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .text-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+    opacity: 0; /* Initial opacity set to 0 */
+    animation: fadeIn 2s ease-out forwards; /* Animation to fade in */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+    .text-box h1 {
+        font-size: 36px;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .text-box p {
+        font-size: 18px;
+        color: blue;
+        margin-bottom: 20px;
+
+    }
+    .about-section {
+        background-image: url('images/star\ gazing.jpg'); /* Replace with your image path */
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 80px 20px; /* Adjust the padding based on your design */
+        text-align: center;
+    }
+
+    .about-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .about-content h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .about-content p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .inductions-section {
+        background-image: url('path/to/your/background-image.jpg'); /* Replace with your image path */
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 80px 20px; /* Adjust the padding based on your design */
+        text-align: center;
+    }
+
+    .inductions-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .inductions-content h2 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .inductions-content p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+   
+</style>
+</head>
+<body style="margin: 0; overflow: scroll; background-color: #000; animation: stars 5s infinite linear;">
+       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">Rocketry Club</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#events">Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#inductions">Inductions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#teams">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contacts">Contacts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="scene" onmousemove="moveRocket(event)">
+         
+
+        <div class="rocket">
+            <img src="images/rocket.png" alt="Rocket">
+        </div>
+        <div id = "home">
+
+            <div class="text-box">
+                <h1>Welcome to the Rocketry Club, where passion meets the cosmos! 🚀✨</h1>
+                <p>Space and beyond</p>
+            </div>
+            <div id="solar-system">
+<div class="solar-system">
+  <div id="sun"></div>
+
+  <div class="orbit mercury-orbit"></div>
+  <div class="mercury-spin">
+    <div id="mercury"></div>
+  </div>
+
+  <div class="orbit venus-orbit"></div>
+  <div class="venus-spin">
+    <div id="venus"></div>
+  </div>
+
+  <div class="orbit earth-orbit"></div>
+  <div class="earth-spin">
+    <div class="orbit moon-orbit"></div>
+    <div class="moon-spin">
+      <div id="moon"></div>
+    </div>
+
+    <img id="earth" src="https://raw.githubusercontent.com/everdimension-personal/codepen-assets/master/earth_small_150.jpg" />
+  </div>
+
+  <div class="orbit mars-orbit"></div>
+  <div class="mars-spin">
+    <div id="mars"></div>
+  </div>
+</div>
+    </div>
+        </div>
+        <div id = "about" class="about-section   effect">
+            <div class="about-content">
+                <h1>About Rocketry Club</h1>
+                <p>Welcome to Rocketry Club, where the thrill of the cosmos meets the passion of rocket enthusiasts. We are a community united by our shared fascination with space exploration, rocket science, and the wonders of the universe.</p>
+
+                <p>Our mission is to ignite curiosity and inspire the next generation of aerospace enthusiasts. Whether you're a seasoned professional, a student, or just someone with a keen interest in the mysteries of the cosmos, Rocketry Club welcomes you to embark on an extraordinary journey with us.</p>
+        
+                <p>What sets us apart is our commitment to hands-on learning and collaboration. Through workshops, events, and design challenges, we provide a platform for members to explore the principles of rocketry, aerospace engineering, and space technology.</p>
+        
+                <p>Join us in celebrating the spirit of innovation, where dreams take flight and aspirations reach new heights. Rocketry Club is not just a club; it's a launchpad for your imagination and a community where the sky is no longer the limit.</p>
+        
+                <p>Let's reach for the stars together!</p>          
+            </div>
+        </div>
+        <div id="events">
+            <h2 class="text-center mb-4">Space Club Events</h2>
+
+            <div class="container">
+                <div class="row">
+                    <!-- Event 1 -->
+                    <div class="col-md-4 mb-4 card effect shine event-card">
+                        <div class="card">
+                            <img src="images/rocket building.jpeg" class="card-img-top" alt="Event 1">
+                            <div class="card-body">
+                                <h5 class="card-title">Rocket Launch Extravaganza
+
+                                </h5>
+                                <p class="card-text">Experience the thrill of rocketry as teams compete to launch their custom-designed rockets into the sky. Witness creativity and engineering excellence as each team aims for the highest altitude and most spectacular flight.</p>
+                                <i class="fas fa-rocket event-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="col-md-4 mb-4 card effect shine event-card">
+                        <div class="card">
+                            <img src="images/star gazing.jpg" class="card-img-top" alt="Event 2">
+                            <div class="card-body">
+                                <h5 class="card-title">Design and Build Challenge: Mission to Mars</h5>
+                                <p class="card-text"> Embark on a mission to Mars by participating in this design and build challenge. Teams will be tasked with creating innovative rockets capable of carrying payloads simulating a mission to the Red Planet. The event emphasizes both design aesthetics and functionality.</p>
+                                <i class="fas fa-rocket event-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="col-md-4 mb-4 card effect shine event-card">
+                        <div class="card">
+                            <img src="images/rocketry expo.jpeg" class="card-img-top" alt="Event 3">
+                            <div class="card-body">
+                                <h5 class="card-title">Stellar Rocketry Symposium</h5>
+                                <p class="card-text">Dive into the fascinating world of rocket science with the Stellar Rocketry Symposium. Engage in insightful discussions, listen to expert speakers, and explore the latest advancements in aerospace technology. A must-attend event for enthusiasts and professionals alike.</p>
+                                <i class="fas fa-rocket event-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 4 -->
+                    <div class="col-md-4 mb-4 card effect shine event-card">
+                        <div class="card">
+                            <img src="images/rocket design.jpeg" class="card-img-top" alt="Event 4">
+                            <div class="card-body">
+                                <h5 class="card-title">Star Gazing Night: A Celestial Odyssey</h5>
+                                <p class="card-text">Join us for an enchanting evening under the vast canvas of the night sky. Our Star Gazing Night promises an unforgettable celestial odyssey, where participants of all ages can marvel at the wonders of the cosmos.</p>
+                                <i class="fas fa-rocket event-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 5 -->
+                    <div class="col-md-4 mb-4 card effect shine event-card">
+                        <div class="card">
+                            <img src="images/rocket building.jpeg" class="card-img-top" alt="Event 5">
+                            <div class="card-body">
+                                <h5 class="card-title">Rocket Building Workshop: Soar to New Heights
+
+                                </h5>
+                                <p class="card-text"> Embark on a thrilling journey into the world of aerospace engineering with our Rocket Building Workshop. This hands-on experience is crafted for enthusiasts of all ages who harbor a fascination for rockets and the science that propels them beyond Earth's atmosphere.</p>
+                                <i class="fas fa-rocket event-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="inductions" class="inductions-section">
+            <div class="inductions-content">
+                <h2>Rocketry Club Inductions</h2>
+                <p>Join our Rocketry Club and embark on an exciting journey into the world of rocket science and space exploration. Our inductions are designed to welcome enthusiasts of all levels, from beginners to experienced aerospace professionals.</p>
+        
+                <p>During the inductions, you'll have the opportunity to:</p>
+                <ul>
+                    <li>Learn the fundamentals of rocketry and aerospace engineering.</li>
+                    <li>Participate in hands-on workshops and design challenges.</li>
+                    <li>Connect with like-minded individuals passionate about space exploration.</li>
+                    <li>Get involved in upcoming events, projects, and team activities.</li>
+                </ul>
+        
+                <p>Whether you're a student, hobbyist, or a seasoned professional, Rocketry Club offers a supportive and collaborative environment for you to expand your knowledge and contribute to the exciting field of space exploration.</p>
+        
+                <p>Get ready to launch your dreams with Rocketry Club!</p>
+            </div>
+        </div>
+
+        <div id="teams">
+            <!-- Existing team section -->
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Meet Our Team</h2>
+        
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4 card effect shine team-member-card">
+                        <div class="card">
+                            <img src="team_member1.jpg" class="card-img-top" alt="Team Member">
+                            <div class="card-body">
+                                <h5 class="card-title">John Doe</h5>
+                                <p class="card-text">
+                                    <a href="https://www.instagram.com/username" target="_blank" class="btn btn-primary">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    <a href="https://www.facebook.com/username" target="_blank" class="btn btn-primary ml-2">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                </div>
+            </div>
+        </div>
+
+<!-- ... Your existing HTML code ... -->
+
+<div id="contacts" class="bg-dark text-white py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Contact Us</h2>
+
+        <div class="row">
+            <!-- Contact Information -->
+            <div class="col-md-6">
+                <div class="card bg-dark border-light mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Location</h5>
+                        <p class="card-text">Rocketry Club HQ, City, Country</p>
+                    </div>
+                </div>
+
+                <div class="card bg-dark border-light mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Email</h5>
+                        <p class="card-text">contact@rocketryclub.com</p>
+                    </div>
+                </div>
+
+                <div class="card bg-dark border-light mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Phone</h5>
+                        <p class="card-text">+1 (123) 456-7890</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="col-md-6">
+                <div class="card bg-dark border-light mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Follow us on Social Media</h5>
+                        <p class="card-text">
+                            <a href="https://www.instagram.com/rocketryclub/" target="_blank" class="text-white">Instagram</a>
+                        </p>
+                        <p class="card-text">
+                            <a href="https://www.linkedin.com/company/rocketryclub/" target="_blank" class="text-white">LinkedIn</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ... The rest of your HTML code ... -->
+
+        
+
+    </div>  
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            createStars();
+        });
+    
+        function createStars() {
+            var scene = document.querySelector(".scene");
+    
+            for (var i = 0; i < 100; i++) {
+                var star = document.createElement("div");
+                star.className = "star";
+                star.style.left = Math.random() * 100 + "vw";
+                star.style.top = Math.random() * 100 + "vh";
+                scene.appendChild(star);
+            }
+        }
+    
+        function moveRocket(event) {
+            var rocket = document.querySelector('.rocket');
+            var mouseX = event.clientX;
+            var mouseY = event.clientY;
+    
+            // Adjust the position relative to the document
+            rocket.style.left = mouseX - rocket.clientWidth / 2 + 'px';
+            rocket.style.top = mouseY - rocket.clientHeight + window.scrollY + 'px';
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            var observer = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+    
+            // Target elements with the 'effect' class
+            var elements = document.querySelectorAll('.effect');
+            elements.forEach(function (element) {
+                observer.observe(element);
+            });
+    
+            // Smooth scroll to sections
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+    
+                    const targetSection = document.querySelector(this.getAttribute('href'));
+                    window.scrollTo({
+                        top: targetSection.offsetTop,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+    
+    
+    
+</body>
+</html>

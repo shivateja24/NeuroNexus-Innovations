@@ -1,0 +1,49 @@
+.create-task-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-task-container h3 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .create-task-container form {
+    display: grid;
+    gap: 10px;
+  }
+  
+  .create-task-container label {
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .create-task-container input,
+  .create-task-container textarea,
+  .create-task-container button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .create-task-container button {
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-task-container button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Add any additional styles or modifications based on your preferences */
+  
